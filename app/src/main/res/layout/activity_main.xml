@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_path_measure"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="开始运动" />
+
+    <fredsun.mastodonreblogbuttondemo.RotateButtonView
+        android:id="@+id/rotateButtonView"
+        android:layout_width="240dp"
+        android:layout_height="200dp"
+        android:layout_above="@+id/btn_start"
+        android:background="@color/colorGray"/>
+
+</RelativeLayout>
