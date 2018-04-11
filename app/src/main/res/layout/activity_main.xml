@@ -18,6 +18,6 @@
         android:layout_width="240dp"
         android:layout_height="200dp"
         android:layout_above="@+id/btn_start"
-        android:background="@color/colorGray"/>
+        />
 
 </RelativeLayout>

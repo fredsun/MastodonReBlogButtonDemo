@@ -1,5 +1,6 @@
 package fredsun.mastodonreblogbuttondemo;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -15,12 +16,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-public class RotateButtonView extends View {
+public class RotateButtonView extends View  {
+    final String DEBUG_TAG = "DEBUG_TAG";
     private PathMeasure mPathMeasure;
     Path path, pathTriangle, pathTriangleRight, pathTrans, pathTransRight;
     Paint paint, paintTriangle, paintTrans;
@@ -33,6 +37,12 @@ public class RotateButtonView extends View {
     float offset, offsetTrans;
     Xfermode xfermode;
     float strokeWidth, roundCornerHeight, sweepAngle;
+    boolean FLAG_SELECTED;
+    ValueAnimator valueAnimator;
+    private SparkEventListener mListener;
+    public void setEventListener(SparkEventListener listener){
+        this.mListener = listener;
+    }
 
     public RotateButtonView(Context context) {
         super(context);
@@ -60,6 +70,40 @@ public class RotateButtonView extends View {
         }else {
             paintTrans.setColor(getResources().getColor(R.color.colorWhite));
         }
+        valueAnimator = ValueAnimator.ofFloat(0,1);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(1200);
+        //每过10毫秒 调用一次
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mAnimatorValue = (float) animation.getAnimatedValue();
+                postInvalidate();
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.i("animator", "start");
+                paint.setColor(getResources().getColor(R.color.colorBlue));
+                paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.i("animator", "end");
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.i("animator", "cancel   ");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     public RotateButtonView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -69,6 +113,7 @@ public class RotateButtonView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        FLAG_SELECTED = false;
         mWidth = w;
         mHeight = h;
         rectWidth = mWidth * 12 / 42;
@@ -78,8 +123,8 @@ public class RotateButtonView extends View {
         offset = mHeight   / 36 ;
         offsetTrans = mHeight * 3 / 36;
         strokeWidth = mWidth * 6 / 42;
-        roundCornerHeight = strokeWidth/2;
-        sweepAngle = 45;
+        roundCornerHeight = strokeWidth/2;//矩形的圆角促使矩形缩短的距离
+        sweepAngle = 45;//矩形的圆角划过的角度
 
         //绘制圆角矩形
         path.moveTo(-rectWidth, -offset);//左侧中间点
@@ -102,7 +147,7 @@ public class RotateButtonView extends View {
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(strokeWidth);
-        paint.setColor(getResources().getColor(R.color.colorAccent));
+        paint.setColor(getResources().getColor(R.color.colorGray));
 
 //        //绘制左侧背景色条
         pathTrans.moveTo(offset,-triangleWidth/2);
@@ -115,9 +160,9 @@ public class RotateButtonView extends View {
 
 //        //绘制左侧三角形
         paintTriangle.setStyle(Paint.Style.FILL);
-        CornerPathEffect cornerPathEffect = new CornerPathEffect(50);//圆角
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(40);//圆角
         paintTriangle.setPathEffect(cornerPathEffect);
-        paintTriangle.setColor(getResources().getColor(R.color.colorAccent));
+        paintTriangle.setColor(getResources().getColor(R.color.colorGray));
         pathTriangle.lineTo(0,-triangleWidth / 2);
         pathTriangle.lineTo(triangleHeight,0);
         pathTriangle.lineTo(0,triangleWidth / 2);
@@ -139,10 +184,7 @@ public class RotateButtonView extends View {
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if(mAnimatorValue == 1){
-            paint.setColor(getResources().getColor(R.color.colorYellow));
-            paintTriangle.setColor(getResources().getColor(R.color.colorYellow));
-        }
+        Log.i("view", "value"+mAnimatorValue);
         mPathMeasure.getPosTan(mAnimatorValue * mPathMeasure.getLength()/2, pos, tan);
 
         canvas.save();
@@ -173,21 +215,84 @@ public class RotateButtonView extends View {
         canvas.restore();
     }
 
+
+
+    void setSelected(){
+        paint.setColor(getResources().getColor(R.color.colorBlue));
+        paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+        postInvalidate();
+    }
+    void setUnSelected(){
+        paint.setColor(getResources().getColor(R.color.colorGray));
+        paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+        postInvalidate();
+    }
     void startMove(){
         //创建一个值从0到xxx的动画
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0,1);
-        valueAnimator.setInterpolator(new DecelerateInterpolator());
-        valueAnimator.setDuration(1200);
-        //每过10毫秒 调用一次
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mAnimatorValue = (float) animation.getAnimatedValue();
-                postInvalidate();
-            }
-        });
         valueAnimator.start();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = MotionEventCompat.getActionMasked(event);
+        int x = (int) event.getX();
+        int y = (int) event.getY();
 
+        switch (action){
+            case (MotionEvent.ACTION_DOWN) :
+                //防止连点
+                if (valueAnimator.isRunning()){
+                    return false;
+                }
+                Log.d(DEBUG_TAG,"Action was DOWN");
+                paint.setColor(getResources().getColor(R.color.colorAccent));
+                paintTriangle.setColor(getResources().getColor(R.color.colorAccent));
+                postInvalidate();
+                return true;
+            case (MotionEvent.ACTION_MOVE) :
+                Log.d(DEBUG_TAG,"Action was MOVE");
+                return true;
+            case (MotionEvent.ACTION_UP) :
+                Log.d(DEBUG_TAG,"Action was UP");
+                //对抬起时的区域判断
+                if (x + getLeft() < getRight() && y + getTop() < getBottom()) {
+                    if (FLAG_SELECTED) {
+                        paint.setColor(getResources().getColor(R.color.colorGray));
+                        paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+                        postInvalidate();
+                        FLAG_SELECTED = false;
+
+                    } else {
+                        paint.setColor(getResources().getColor(R.color.colorBlue));
+                        paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+                        FLAG_SELECTED = true;
+                        startMove();
+                    }
+                }else {
+                   if (FLAG_SELECTED){
+                       paint.setColor(getResources().getColor(R.color.colorBlue));
+                       paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+                       postInvalidate();
+                   }else {
+                       paint.setColor(getResources().getColor(R.color.colorGray));
+                       paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+                       postInvalidate();
+                   }
+                }
+                mListener.onFingerUp(FLAG_SELECTED);
+                return true;
+            case (MotionEvent.ACTION_CANCEL) :
+                Log.d(DEBUG_TAG,"Action was CANCEL");
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE) :
+                Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
+                        "of current screen element");
+                return true;
+            default :
+                return super.onTouchEvent(event);
+        }
+    }
+    public interface SparkEventListener{
+        void onFingerUp(boolean flag);
+    }
 }
