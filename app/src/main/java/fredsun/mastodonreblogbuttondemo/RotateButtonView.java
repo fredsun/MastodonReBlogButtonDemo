@@ -32,7 +32,7 @@ public class RotateButtonView extends View {
     float triangleWidth, triangleHeight;
     float offset, offsetTrans;
     Xfermode xfermode;
-    float strokeWidth;
+    float strokeWidth, roundCornerHeight, sweepAngle;
 
     public RotateButtonView(Context context) {
         super(context);
@@ -78,45 +78,24 @@ public class RotateButtonView extends View {
         offset = mHeight   / 36 ;
         offsetTrans = mHeight * 3 / 36;
         strokeWidth = mWidth * 6 / 42;
+        roundCornerHeight = strokeWidth/2;
+        sweepAngle = 45;
 
-//        path.moveTo(-rectWidth, -offset);//左侧中间点
-//        path.lineTo(-rectWidth, -rectHeight);
-//        path.lineTo(rectWidth, -rectHeight);
-//        path.lineTo(rectWidth, rectHeight);
-//        path.lineTo(-rectWidth, rectHeight);
-//        path.lineTo(-rectWidth, -offset);
-
-//        path.moveTo(-rectWidth, -offset);//左侧中间点
-//        path.lineTo(-rectWidth, -(rectHeight-strokeWidth));
-//        RectF rectF = new RectF(-rectWidth, -rectHeight, -(rectWidth - 2 * strokeWidth), -(rectHeight - 2 * strokeWidth));
-//        path.arcTo(rectF, -180, 90, false);
-//        path.lineTo(-(rectWidth-strokeWidth), -rectHeight );
-//        path.lineTo(rectWidth - strokeWidth, -rectHeight);
-//        RectF rectRightTop = new RectF(rectWidth - 2 * strokeWidth, -rectHeight, rectWidth, -(rectHeight - 2 * strokeWidth));
-//        path.arcTo(rectRightTop, -90, 90);
-//        path.lineTo(rectWidth, rectHeight - strokeWidth);
-//        RectF rectRightBottom = new RectF(rectWidth - 2 * strokeWidth, rectHeight - 2 * strokeWidth, rectWidth, rectHeight);
-//        path.arcTo(rectRightBottom, 0,90,false);
-//        path.lineTo(-(rectWidth-strokeWidth), rectHeight);
-//        RectF rectLeftBottom = new RectF(-rectWidth, rectHeight - 2 * strokeWidth, -(rectWidth - 2 * strokeWidth), rectHeight);
-//        path.arcTo(rectLeftBottom, 90, 90, false);
-//        path.lineTo(-rectWidth, -offset);
-
-//        //绘制圆角矩形
+        //绘制圆角矩形
         path.moveTo(-rectWidth, -offset);//左侧中间点
         path.lineTo(-rectWidth, -(rectHeight-strokeWidth));
-        RectF rectF = new RectF(-rectWidth, -rectHeight, -(rectWidth - 2 * strokeWidth/2), -(rectHeight - 2 * strokeWidth/2));
-        path.arcTo(rectF, -180+22.5f, 45, false);
-        path.lineTo(-(rectWidth-strokeWidth/2), -rectHeight );
-        path.lineTo(rectWidth - strokeWidth/2, -rectHeight);
-        RectF rectRightTop = new RectF(rectWidth - 2 * strokeWidth/2, -rectHeight, rectWidth, -(rectHeight - 2 * strokeWidth/2));
-        path.arcTo(rectRightTop, -90+22.5f, 45);
-        path.lineTo(rectWidth, rectHeight - strokeWidth/2);
-        RectF rectRightBottom = new RectF(rectWidth - 2 * strokeWidth/2, rectHeight - 2 * strokeWidth/2, rectWidth, rectHeight);
-        path.arcTo(rectRightBottom, 22.5f,45,false);
-        path.lineTo(-(rectWidth-strokeWidth/2), rectHeight);
-        RectF rectLeftBottom = new RectF(-rectWidth, rectHeight - 2 * strokeWidth/2, -(rectWidth - 2 * strokeWidth/2), rectHeight);
-        path.arcTo(rectLeftBottom, 125f, 45, false);
+        RectF rectF = new RectF(-rectWidth, -rectHeight, -(rectWidth - 2 * roundCornerHeight), -(rectHeight - 2 * roundCornerHeight));
+        path.arcTo(rectF, -180 + sweepAngle/2, sweepAngle, false);
+        path.lineTo(-(rectWidth-roundCornerHeight), -rectHeight );
+        path.lineTo(rectWidth - roundCornerHeight, -rectHeight);
+        RectF rectRightTop = new RectF(rectWidth - 2 * roundCornerHeight, -rectHeight, rectWidth, -(rectHeight - 2 * roundCornerHeight));
+        path.arcTo(rectRightTop, -90 + sweepAngle/2, sweepAngle);
+        path.lineTo(rectWidth, rectHeight - roundCornerHeight);
+        RectF rectRightBottom = new RectF(rectWidth - 2 * roundCornerHeight, rectHeight - 2 * roundCornerHeight, rectWidth, rectHeight);
+        path.arcTo(rectRightBottom, sweepAngle/2,sweepAngle,false);
+        path.lineTo(-(rectWidth-roundCornerHeight), rectHeight);
+        RectF rectLeftBottom = new RectF(-rectWidth, rectHeight - 2 * roundCornerHeight, -(rectWidth - 2 * roundCornerHeight), rectHeight);
+        path.arcTo(rectLeftBottom, 90 + sweepAngle/2+20, sweepAngle, false);
         path.lineTo(-rectWidth, -offset);
 
         mPathMeasure.setPath(path, true);
