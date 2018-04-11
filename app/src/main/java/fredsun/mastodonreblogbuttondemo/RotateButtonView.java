@@ -183,6 +183,22 @@ public class RotateButtonView extends View  {
 
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+        if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST){
+            setMeasuredDimension(240,200);
+        }else if(widthSpecMode == MeasureSpec.AT_MOST){
+            setMeasuredDimension(240, heightSpecSize);
+        }else if(heightSpecMode == MeasureSpec.AT_MOST){
+            setMeasuredDimension(widthSpecSize, 200);
+        }
+    }
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Log.i("view", "value"+mAnimatorValue);
