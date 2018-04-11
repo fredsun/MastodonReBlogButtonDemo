@@ -70,6 +70,7 @@ public class RotateButtonView extends View  {
         }else {
             paintTrans.setColor(getResources().getColor(R.color.colorWhite));
         }
+        //创建一个值从0到xxx的动画
         valueAnimator = ValueAnimator.ofFloat(0,1);
         valueAnimator.setInterpolator(new DecelerateInterpolator());
         valueAnimator.setDuration(1200);
@@ -215,8 +216,6 @@ public class RotateButtonView extends View  {
         canvas.restore();
     }
 
-
-
     void setSelected(){
         paint.setColor(getResources().getColor(R.color.colorBlue));
         paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
@@ -228,7 +227,6 @@ public class RotateButtonView extends View  {
         postInvalidate();
     }
     void startMove(){
-        //创建一个值从0到xxx的动画
         valueAnimator.start();
     }
 
