@@ -40,6 +40,7 @@ public class RotateButtonView extends View  {
     boolean FLAG_SELECTED;
     ValueAnimator valueAnimator;
     private SparkEventListener mListener;
+    private int viewBackgroundColor;
     public void setEventListener(SparkEventListener listener){
         this.mListener = listener;
     }
@@ -64,11 +65,11 @@ public class RotateButtonView extends View  {
         if (background instanceof ColorDrawable){
             ColorDrawable colorDrawable = (ColorDrawable) background;
             int color = colorDrawable.getColor();
-            paintTrans.setColor(color);
+            viewBackgroundColor = color;
         }else if (background instanceof BitmapDrawable){
             throw new AssertionError("you can't set a bitmap as background ");
         }else {
-            paintTrans.setColor(getResources().getColor(R.color.colorWhite));
+            viewBackgroundColor = getResources().getColor(R.color.colorBackground);
         }
         //创建一个值从0到xxx的动画
         valueAnimator = ValueAnimator.ofFloat(0,1);
@@ -155,6 +156,7 @@ public class RotateButtonView extends View  {
         pathTrans.lineTo(triangleHeight*1.2f,0);
         pathTrans.lineTo(0,triangleWidth/2*1.2f);
         pathTrans.lineTo(0,-triangleWidth/2*1.2f);
+        paintTrans.setColor(viewBackgroundColor);
         paintTrans.setStyle(Paint.Style.FILL);
         xfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
         paintTrans.setXfermode(xfermode);
@@ -205,6 +207,7 @@ public class RotateButtonView extends View  {
         Log.i("view", "value"+mAnimatorValue);
         mPathMeasure.getPosTan(mAnimatorValue * mPathMeasure.getLength()/2, pos, tan);
 
+        canvas.drawColor(viewBackgroundColor);
         canvas.save();
         canvas.translate(mWidth/2, mHeight/2);//坐标系原点切到控件1/2处
         canvas.drawPath(path, paint);
