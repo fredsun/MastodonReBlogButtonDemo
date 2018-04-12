@@ -151,17 +151,17 @@ public class RotateButtonView extends View  {
         paint.setColor(getResources().getColor(R.color.colorGray));
 
 //        //绘制左侧背景色条
-        pathTrans.moveTo(offset,-triangleWidth/2);
-        pathTrans.lineTo(triangleHeight+offset,0);
-        pathTrans.lineTo(offset,triangleWidth/2);
-        paintTrans.setStyle(Paint.Style.STROKE);
-        paintTrans.setStrokeWidth(strokeWidth/2);
+        pathTrans.moveTo(0,-triangleWidth/2*1.2f);
+        pathTrans.lineTo(triangleHeight*1.2f,0);
+        pathTrans.lineTo(0,triangleWidth/2*1.2f);
+        pathTrans.lineTo(0,-triangleWidth/2*1.2f);
+        paintTrans.setStyle(Paint.Style.FILL);
         xfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
         paintTrans.setXfermode(xfermode);
 
 //        //绘制左侧三角形
         paintTriangle.setStyle(Paint.Style.FILL);
-        CornerPathEffect cornerPathEffect = new CornerPathEffect(40);//圆角
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(offsetTrans);//圆角
         paintTriangle.setPathEffect(cornerPathEffect);
         paintTriangle.setColor(getResources().getColor(R.color.colorGray));
         pathTriangle.lineTo(0,-triangleWidth / 2);
@@ -176,9 +176,10 @@ public class RotateButtonView extends View  {
         pathTriangleRight.close();
 
         //绘制右侧背景色条
-        pathTransRight.moveTo(-offset,-triangleWidth/2);
-        pathTransRight.lineTo(-triangleHeight-offset,0);
-        pathTransRight.lineTo(-offset,triangleWidth/2);
+        pathTransRight.moveTo(0,-triangleWidth/2*1.2f);
+        pathTransRight.lineTo(-triangleHeight*1.2f,0);
+        pathTransRight.lineTo(0,triangleWidth/2*1.2f);
+        pathTransRight.lineTo(0,-triangleWidth/2*1.2f);
 
 
     }
