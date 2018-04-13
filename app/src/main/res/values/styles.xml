@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="status_favourite_active_drawable">@drawable/ic_favorite_black_24dp</item>
+        <item name="status_favourite_inactive_drawable">@drawable/ic_favorite_border_black_24dp</item>
     </style>
 
 </resources>

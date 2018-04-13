@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_path_measure"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textMain"/>
     <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
@@ -18,6 +23,19 @@
         android:layout_width="240dp"
         android:layout_height="200dp"
         android:layout_above="@+id/btn_start"
+        android:background="@color/colorWhite"
         />
+
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/status_favourite"
+            android:layout_width="24dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            app:sparkbutton_activeImage="?attr/status_favourite_active_drawable"
+            app:sparkbutton_iconSize="24dp"
+            app:sparkbutton_inActiveImage="?attr/status_favourite_inactive_drawable"
+            app:sparkbutton_primaryColor="@color/status_favourite_button_marked_dark"
+            app:sparkbutton_secondaryColor="@color/status_favourite_button_marked_light"/>
+
 
 </RelativeLayout>

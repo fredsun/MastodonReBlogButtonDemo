@@ -8,4 +8,13 @@
     <color name="colorGray">#616981</color>
     <color name="colorBlue">#488FD3</color>
     <color name="colorBackground">#292c36</color>
+    <color name="colorForeground">#55616981</color>
+    <color name="colorTrans">#00FFFFFF</color>
+
+    <color name="status_reblog_button_dark">#606984</color>
+    <color name="status_reblog_button_marked_dark">#2b90d9</color>
+    <color name="status_reblog_button_disabled_dark">#444b5d</color>
+    <color name="status_favourite_button_dark">#606984</color>
+    <color name="status_favourite_button_marked_dark">#ca8f04</color>
+    <color name="status_favourite_button_marked_light">#fab207</color>
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="status_reblog_small_drawable" format="reference" />
+    <attr name="status_reblog_inactive_drawable" format="reference" />
+    <attr name="status_reblog_disabled_drawable" format="reference" />
+    <attr name="status_reblog_direct_drawable" format="reference" />
+    <attr name="status_favourite_active_drawable" format="reference" />
+    <attr name="status_favourite_inactive_drawable" format="reference" />
+</resources>
