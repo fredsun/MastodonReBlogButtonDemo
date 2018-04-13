@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-public class RotateButtonView extends View  {
+public class RotateButtonView extends View{
     final String DEBUG_TAG = "DEBUG_TAG";
     private PathMeasure mPathMeasure;
     Path path, pathTriangle, pathTriangleRight, pathTrans, pathTransRight;
@@ -250,6 +250,7 @@ public class RotateButtonView extends View  {
         valueAnimator.start();
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
@@ -258,35 +259,43 @@ public class RotateButtonView extends View  {
 
         switch (action){
             case (MotionEvent.ACTION_DOWN) :
+                Log.d(DEBUG_TAG,"Action was DOWN");
                 //防止连点
                 if (valueAnimator.isRunning()){
                     return false;
                 }
-                Log.d(DEBUG_TAG,"Action was DOWN");
+                setPressed(true);
+
                 paint.setColor(getResources().getColor(R.color.colorAccent));
                 paintTriangle.setColor(getResources().getColor(R.color.colorAccent));
                 postInvalidate();
-                return true;
+                break;
             case (MotionEvent.ACTION_MOVE) :
                 Log.d(DEBUG_TAG,"Action was MOVE");
-                return true;
+                break;
             case (MotionEvent.ACTION_UP) :
+                if (isPressed()){
+                    setPressed(false);
+                }
                 Log.d(DEBUG_TAG,"Action was UP");
                 //对抬起时的区域判断
                 if (x + getLeft() < getRight() && y + getTop() < getBottom()) {
                     if (FLAG_SELECTED) {
+                        //区域内, 选中变色未选中
                         paint.setColor(getResources().getColor(R.color.colorGray));
                         paintTriangle.setColor(getResources().getColor(R.color.colorGray));
                         postInvalidate();
                         FLAG_SELECTED = false;
 
                     } else {
+                        //区域内, 未选中开始动画
                         paint.setColor(getResources().getColor(R.color.colorBlue));
                         paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
                         FLAG_SELECTED = true;
                         startMove();
                     }
                 }else {
+                    //区域外, 回到原来颜色
                    if (FLAG_SELECTED){
                        paint.setColor(getResources().getColor(R.color.colorBlue));
                        paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
@@ -297,19 +306,30 @@ public class RotateButtonView extends View  {
                        postInvalidate();
                    }
                 }
-                mListener.onFingerUp(FLAG_SELECTED);
-                return true;
+                if (mListener!=null) {
+                    mListener.onFingerUp(FLAG_SELECTED);
+                }
+                break;
             case (MotionEvent.ACTION_CANCEL) :
                 Log.d(DEBUG_TAG,"Action was CANCEL");
-                return true;
+                if (FLAG_SELECTED){
+                    paint.setColor(getResources().getColor(R.color.colorBlue));
+                    paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+                    postInvalidate();
+                }else {
+                    paint.setColor(getResources().getColor(R.color.colorGray));
+                    paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+                    postInvalidate();
+                }
+                break;
             case (MotionEvent.ACTION_OUTSIDE) :
                 Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
                         "of current screen element");
-                return true;
-            default :
-                return super.onTouchEvent(event);
+                break;
         }
+        return true;
     }
+
     public interface SparkEventListener{
         void onFingerUp(boolean flag);
     }
