@@ -339,6 +339,16 @@ public class RotateButtonView extends View{
         return true;
     }
 
+    //添加页面被移除时的动画取消, 防止内存泄漏
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (valueAnimator != null && valueAnimator.isRunning()){
+            valueAnimator.cancel();
+        }
+        animate().cancel();
+    }
+
     public interface SparkEventListener{
         void onFingerUp(boolean flag);
     }
