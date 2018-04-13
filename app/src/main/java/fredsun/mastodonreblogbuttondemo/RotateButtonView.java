@@ -44,6 +44,7 @@ public class RotateButtonView extends View{
     public void setEventListener(SparkEventListener listener){
         this.mListener = listener;
     }
+    public static final DecelerateInterpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
 
     public RotateButtonView(Context context) {
         super(context);
@@ -86,19 +87,37 @@ public class RotateButtonView extends View{
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Log.i("animator", "start");
                 paint.setColor(getResources().getColor(R.color.colorBlue));
                 paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.i("animator", "end");
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                Log.i("animator", "cancel   ");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
             }
 
             @Override
@@ -204,7 +223,6 @@ public class RotateButtonView extends View{
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.i("view", "value"+mAnimatorValue);
         mPathMeasure.getPosTan(mAnimatorValue * mPathMeasure.getLength()/2, pos, tan);
 
         canvas.drawColor(viewBackgroundColor);
@@ -259,25 +277,21 @@ public class RotateButtonView extends View{
 
         switch (action){
             case (MotionEvent.ACTION_DOWN) :
-                Log.d(DEBUG_TAG,"Action was DOWN");
+                animate().scaleX(0.8f).scaleY(0.8f).setDuration(150).setInterpolator(DECELERATE_INTERPOLATOR);
                 //防止连点
                 if (valueAnimator.isRunning()){
                     return false;
                 }
                 setPressed(true);
-
-                paint.setColor(getResources().getColor(R.color.colorAccent));
-                paintTriangle.setColor(getResources().getColor(R.color.colorAccent));
                 postInvalidate();
                 break;
             case (MotionEvent.ACTION_MOVE) :
-                Log.d(DEBUG_TAG,"Action was MOVE");
                 break;
             case (MotionEvent.ACTION_UP) :
+                animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(DECELERATE_INTERPOLATOR);
                 if (isPressed()){
                     setPressed(false);
                 }
-                Log.d(DEBUG_TAG,"Action was UP");
                 //对抬起时的区域判断
                 if (x + getLeft() < getRight() && y + getTop() < getBottom()) {
                     if (FLAG_SELECTED) {
@@ -295,7 +309,7 @@ public class RotateButtonView extends View{
                         startMove();
                     }
                 }else {
-                    //区域外, 回到原来颜色
+                    //区域外, 回到原来颜色, 无效点击
                    if (FLAG_SELECTED){
                        paint.setColor(getResources().getColor(R.color.colorBlue));
                        paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
@@ -311,7 +325,6 @@ public class RotateButtonView extends View{
                 }
                 break;
             case (MotionEvent.ACTION_CANCEL) :
-                Log.d(DEBUG_TAG,"Action was CANCEL");
                 if (FLAG_SELECTED){
                     paint.setColor(getResources().getColor(R.color.colorBlue));
                     paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
@@ -321,10 +334,6 @@ public class RotateButtonView extends View{
                     paintTriangle.setColor(getResources().getColor(R.color.colorGray));
                     postInvalidate();
                 }
-                break;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
-                        "of current screen element");
                 break;
         }
         return true;
