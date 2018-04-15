@@ -7,15 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, RotateButtonView.SparkEventListener {
-    private RotateButtonView rotateButtonView;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MastodonReblogButton.SparkEventListener {
+    private MastodonReblogButton rotateButtonView;
     private Button btn_start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rotateButtonView = (RotateButtonView) findViewById(R.id.rotateButtonView);
+        rotateButtonView = (MastodonReblogButton) findViewById(R.id.rotateButtonView);
         rotateButtonView.setEventListener(this);
         btn_start = (Button) findViewById(R.id.btn_start);
         btn_start.setOnClickListener(this);

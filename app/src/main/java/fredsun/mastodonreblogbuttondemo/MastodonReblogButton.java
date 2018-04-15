@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-public class RotateButtonView extends View{
+public class MastodonReblogButton extends View{
     final String DEBUG_TAG = "DEBUG_TAG";
     private PathMeasure mPathMeasure;
     Path path, pathTriangle, pathTriangleRight, pathTrans, pathTransRight;
@@ -46,11 +46,11 @@ public class RotateButtonView extends View{
     }
     public static final DecelerateInterpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
 
-    public RotateButtonView(Context context) {
+    public MastodonReblogButton(Context context) {
         super(context);
     }
 
-    public RotateButtonView(Context context, @Nullable AttributeSet attrs) {
+    public MastodonReblogButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         path = new Path();
         pathTriangle = new Path();
@@ -127,7 +127,7 @@ public class RotateButtonView extends View{
         });
     }
 
-    public RotateButtonView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MastodonReblogButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
