@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-public class MastodonReblogButton extends View{
+public class MastodonReblogButton extends View implements View.OnClickListener {
     final String DEBUG_TAG = "DEBUG_TAG";
     private PathMeasure mPathMeasure;
     Path path, pathTriangle, pathTriangleRight, pathTrans, pathTransRight;
@@ -37,13 +37,13 @@ public class MastodonReblogButton extends View{
     float offset, offsetTrans;
     Xfermode xfermode;
     float strokeWidth, roundCornerHeight, sweepAngle;
-    boolean FLAG_SELECTED;
+    boolean FLAG_SELECTED = false;
     ValueAnimator valueAnimator;
-    private SparkEventListener mListener;
+//    private SparkEventListener mListener;
     private int viewBackgroundColor;
-    public void setEventListener(SparkEventListener listener){
-        this.mListener = listener;
-    }
+//    public void setEventListener(SparkEventListener listener){
+//        this.mListener = listener;
+//    }
     public static final DecelerateInterpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
 
     public MastodonReblogButton(Context context) {
@@ -125,16 +125,20 @@ public class MastodonReblogButton extends View{
 
             }
         });
+        setOnClickListener(this);
     }
 
     public MastodonReblogButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+    public void setFlag(boolean isSelected){
+        FLAG_SELECTED = isSelected;
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        FLAG_SELECTED = false;
+
         mWidth = w;
         mHeight = h;
         rectWidth = mWidth * 12 / 42;
@@ -168,7 +172,14 @@ public class MastodonReblogButton extends View{
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(strokeWidth);
-        paint.setColor(getResources().getColor(R.color.colorGray));
+        if (FLAG_SELECTED){
+            paint.setColor(getResources().getColor(R.color.colorBlue));
+            paintTriangle.setColor(getResources().getColor(R.color.colorBlue));
+        }else {
+            paint.setColor(getResources().getColor(R.color.colorGray));
+            paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+        }
+
 
 //        //绘制左侧背景色条
         pathTrans.moveTo(0,-triangleWidth/2*1.2f);
@@ -184,7 +195,7 @@ public class MastodonReblogButton extends View{
         paintTriangle.setStyle(Paint.Style.FILL);
         CornerPathEffect cornerPathEffect = new CornerPathEffect(offsetTrans);//圆角
         paintTriangle.setPathEffect(cornerPathEffect);
-        paintTriangle.setColor(getResources().getColor(R.color.colorGray));
+
         pathTriangle.lineTo(0,-triangleWidth / 2);
         pathTriangle.lineTo(triangleHeight,0);
         pathTriangle.lineTo(0,triangleWidth / 2);
@@ -308,6 +319,7 @@ public class MastodonReblogButton extends View{
                         FLAG_SELECTED = true;
                         startMove();
                     }
+                    performClick();
                 }else {
                     //区域外, 回到原来颜色, 无效点击
                    if (FLAG_SELECTED){
@@ -320,9 +332,9 @@ public class MastodonReblogButton extends View{
                        postInvalidate();
                    }
                 }
-                if (mListener!=null) {
-                    mListener.onFingerUp(FLAG_SELECTED);
-                }
+//                if (mListener!=null) {
+//                    mListener.onFingerUp(FLAG_SELECTED);
+//                }
                 break;
             case (MotionEvent.ACTION_CANCEL) :
                 animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(DECELERATE_INTERPOLATOR);
@@ -350,7 +362,12 @@ public class MastodonReblogButton extends View{
         animate().cancel();
     }
 
-    public interface SparkEventListener{
-        void onFingerUp(boolean flag);
+    @Override
+    public void onClick(View v) {
+        Log.i("button","click");
     }
+
+//    public interface SparkEventListener{
+//        void onFingerUp(boolean flag);
+//    }
 }
