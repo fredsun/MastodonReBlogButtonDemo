@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, MastodonReblogButton.SparkEventListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private MastodonReblogButton rotateButtonView;
     private Button btn_start;
 
@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         rotateButtonView = (MastodonReblogButton) findViewById(R.id.rotateButtonView);
-        rotateButtonView.setEventListener(this);
         btn_start = (Button) findViewById(R.id.btn_start);
         btn_start.setOnClickListener(this);
     }
@@ -29,8 +28,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onFingerUp(boolean flag) {
-        Log.i("flag", "flag="+flag);
-    }
+
 }
